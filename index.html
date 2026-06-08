@@ -3,28 +3,37 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>AR</title>
+<title>AR Product</title>
 <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js"></script>
 <style>
-* { margin: 0; padding: 0; }
-body { background: #111; }
-model-viewer {
-  width: 100vw;
-  height: 100vh;
-  background-color: #111;
-}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { background: #000; overflow: hidden; }
+#video { position: fixed; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0; }
+model-viewer { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; background: transparent; --poster-color: transparent; }
+#btn { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); z-index: 10; background: white; border: none; border-radius: 25px; padding: 14px 28px; font-size: 16px; font-weight: bold; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.3); }
 </style>
 </head>
 <body>
+<video id="video" autoplay playsinline muted></video>
 <model-viewer
   src="https://rouroo261528-beep.github.io/Uuu/07_06_2026.glb"
-  ar
-  ar-modes="webxr scene-viewer quick-look"
   camera-controls
   auto-rotate
-  shadow-intensity="1"
-  loading="eager"
-  reveal="auto">
+  shadow-intensity="0"
+  background-color="transparent"
+  loading="eager">
 </model-viewer>
+<button id="btn" onclick="startCamera()">📷 فتح الكاميرا</button>
+<script>
+async function startCamera() {
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' }, audio: false });
+    document.getElementById('video').srcObject = stream;
+    document.getElementById('btn').style.display = 'none';
+  } catch(e) {
+    alert('تعذر فتح الكاميرا');
+  }
+}
+</script>
 </body>
 </html>
